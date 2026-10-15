@@ -1,48 +1,41 @@
-# Australian Team Time Zones
+# Team Time Zones — Australia & Tokyo
 
-A responsive, static Vercel dashboard with six live Australian clocks, adjustable comparisons, drag-and-drop ordering, and a UTC clock.
+A responsive, static Vercel dashboard with six live clocks, selectable comparisons, manual drag-and-drop order, automatic UTC sorting, a UTC clock, and System / Light / Dark themes.
 
-- **WA:** Perth — AWST (UTC+08:00), initial comparison reference.
-- **NT:** Darwin — ACST (UTC+09:30) year-round.
-- **SA / Steve:** Adelaide — ACST or ACDT depending on daylight saving.
-- **ACT:** Canberra — AEST or AEDT depending on daylight saving.
-- **QLD / Daniel:** Brisbane — AEST (UTC+10:00) year-round.
-- **NSW / VIC:** Sydney / Melbourne — AEST or AEDT depending on daylight saving.
-
-## Clock ordering
-
-Cards are **sorted by current UTC offset (ascending) by default**, including daylight saving. During Australian daylight saving (October–April), the three-column/two-row desktop layout is:
-
-| | | |
+| Clock | IANA timezone | Abbreviation |
 |---|---|---|
-| WA | NT | QLD |
-| SA | ACT | NSW / VIC |
+| WA — Perth | Australia/Perth | AWST (UTC+8) |
+| Tokyo — Carla | Asia/Tokyo | JST (UTC+9, no daylight saving) |
+| NT — Darwin | Australia/Darwin | ACST (UTC+9:30, no daylight saving) |
+| SA — Steve | Australia/Adelaide | ACST / ACDT (daylight saving) |
+| QLD — Daniel | Australia/Brisbane | AEST (UTC+10, no daylight saving) |
+| NSW / VIC / ACT | Australia/Sydney | AEST / AEDT (daylight saving) |
 
-During the standard-time months, UTC sorting changes the order as necessary. Where two regions share the same offset, the tie-breaker is stable and deterministic. All clock cards use a normal CSS grid; on tablet/mobile they reflow into two columns or a single column.
+The six cards appear in ascending *current* UTC offset by default, wrapping across three columns on desktop, two columns on tablets, and one on phones. During daylight saving the order is **WA, Tokyo, NT, QLD, SA, NSW/VIC/ACT**; in Australian winter it is **WA, Tokyo, NT, SA, QLD, NSW/VIC/ACT**.
 
-**Drag the six-dot grip** in a card to manually reposition it (works with mouse and touch/pointer input). With keyboard focus on the grip, arrow keys move the card one position or row. Custom ordering persists across page reloads in the same browser via `localStorage`. Press **Sort by UTC** to remove the custom order and return to DST-aware automatic sorting.
+Drag the grip in any clock, or focus it and use arrow keys, to reorder cards. Custom ordering persists within the same browser. **Sort by UTC** clears the custom order. The **BASED ON** dropdown selects any clock as the comparison reference; every card shows its difference from that clock. The small UTC clock updates every second. Timezone and DST information comes from your browser's IANA timezone database via `Intl.DateTimeFormat`.
 
-## Clock comparison
+The **Appearance** selector offers **System** (default), **Light**, and **Dark**. System follows OS light/dark changes live; selecting Light or Dark persists in `localStorage`, like the comparison reference and clock order.
 
-The **BASED ON** dropdown sets any of the six clocks as the reference. Their differences update immediately and the choice is remembered in the same browser. The selected reference card shows `BASE`, and another card with the same offset shows `SAME`. The small **Current UTC Time** clock below the cards also updates every second.
+Existing settings from v3/v4 are migrated when possible: a previous ACT reference becomes NSW/VIC/ACT, and an ACT card position in a saved manual order is assigned to Tokyo.
 
-Local clock times and UTC offsets come from `Intl.DateTimeFormat` using the browser's IANA timezone data. No hard-coded DST dates, servers, API keys, frameworks, or dependencies required.
+## Deploy the update to an existing Vercel project
 
-## Deploy to Vercel
+If you're already using Vercel CLI from a linked project folder, replace the source files with this release and run:
 
-1. Import the folder into Vercel from GitHub, or run `npx vercel --prod` from the project folder.
-2. Choose **Other** as framework with no build command. Output directory is project root (`.`).
-3. Deploy. The entry point is `index.html`.
-
-## Local development / verification
-
-Requires Node.js 20+.
-
-```bash
-npm run dev
-npm test
+```sh
+npx vercel --prod
 ```
 
-Open http://localhost:3000.
+For a new project, run `npx vercel --prod` from the extracted folder, selecting **Other** framework with no build command. The entry point is `index.html` and the static output directory is `.`.
 
-For text and labels edit `index.html`, for appearance edit `styles.css`, for behavior edit `clock.js`, and for the UTC sorting rules edit `ordering.js`.
+## Local verification
+
+Node.js 20+:
+
+```sh
+npm test
+npm run dev
+```
+
+Open http://localhost:3000. No dependencies, API keys or runtime build process required.

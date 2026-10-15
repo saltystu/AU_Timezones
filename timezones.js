@@ -26,6 +26,7 @@ export function getAbbreviation(timeZone, offsetMinutes) {
     case 'Australia/Darwin': return 'ACST';
     case 'Australia/Adelaide': return offsetMinutes === 630 ? 'ACDT' : 'ACST';
     case 'Australia/Brisbane': return 'AEST';
+    case 'Asia/Tokyo': return 'JST';
     case 'Australia/Sydney':
     case 'Australia/Canberra': return offsetMinutes === 660 ? 'AEDT' : 'AEST';
     default: throw new Error(`Unsupported zone: ${timeZone}`);

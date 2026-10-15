@@ -16,17 +16,17 @@ const zoneLabels = {
   'Australia/Perth': 'WA',
   'Australia/Darwin': 'NT',
   'Australia/Adelaide': 'SA',
-  'Australia/Canberra': 'ACT',
+  'Asia/Tokyo': 'Tokyo — Carla',
   'Australia/Brisbane': 'QLD',
-  'Australia/Sydney': 'NSW / VIC'
+  'Australia/Sydney': 'NSW / VIC / ACT'
 };
 const cityLabels = {
   'Australia/Perth': 'Perth',
   'Australia/Darwin': 'Darwin',
   'Australia/Adelaide': 'Adelaide',
-  'Australia/Canberra': 'Canberra',
+  'Asia/Tokyo': 'Tokyo',
   'Australia/Brisbane': 'Brisbane',
-  'Australia/Sydney': 'Sydney / Melbourne'
+  'Australia/Sydney': 'Sydney / Melbourne / Canberra'
 };
 
 let customOrder = null;
@@ -34,9 +34,17 @@ let isDragging = false;
 let displayedOrder = allZones;
 try {
   const stored = localStorage.getItem('au-clock-reference');
-  if (Object.hasOwn(zoneLabels, stored)) zonePicker.value = stored;
+  if (stored === 'Australia/Canberra') zonePicker.value = 'Australia/Sydney';
+  else if (Object.hasOwn(zoneLabels, stored)) zonePicker.value = stored;
   const savedOrder = localStorage.getItem('au-clock-card-order');
-  if (savedOrder) customOrder = validateSavedOrder(JSON.parse(savedOrder), allZones);
+  if (savedOrder) {
+    const parsed = JSON.parse(savedOrder);
+    // Migrate v3/v4's removed ACT card to Tokyo, retaining the other positions.
+    const migrated = Array.isArray(parsed) ? parsed.map(zone => zone === 'Australia/Canberra' ? 'Asia/Tokyo' : zone) : parsed;
+    customOrder = validateSavedOrder(migrated, allZones);
+    if (customOrder && JSON.stringify(parsed) !== JSON.stringify(customOrder))
+      localStorage.setItem('au-clock-card-order', JSON.stringify(customOrder));
+  }
 } catch { /* Local storage is optional. */ }
 
 function applyOrder(order) {

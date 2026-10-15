@@ -6,7 +6,7 @@ export const REGION_ZONES = [
   'Australia/Darwin',
   'Australia/Adelaide',
   'Australia/Brisbane',
-  'Australia/Canberra',
+  'Asia/Tokyo',
   'Australia/Sydney'
 ];
 

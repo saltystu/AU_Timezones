@@ -4,10 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0a101d" />
-  <meta name="description" content="Live clocks across six Australian regions, with daylight saving and selectable time-zone comparisons." />
+  <script>
+    // Apply saved or system theme before the stylesheet renders.
+    const validModes = ["system", "light", "dark"];
+    let storedMode = "system";
+    try { storedMode = localStorage.getItem("au-clock-theme") || "system"; } catch {}
+    if (!validModes.includes(storedMode)) storedMode = "system";
+    document.documentElement.dataset.themePreference = storedMode;
+    document.documentElement.dataset.theme = storedMode === "system"
+      ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : storedMode;
+  </script>
+  <meta name="description" content="Live team clocks across Australia and Tokyo, with daylight saving, draggable ordering, and selectable time comparisons." />
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/styles.css" />
-  <title>Australian Team Time Zones</title>
+  <title>Team Time Zones — Australia &amp; Tokyo</title>
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -16,13 +27,23 @@
   <main class="dashboard">
     <header class="page-header">
       <div>
-        <div class="eyebrow"><span class="eyebrow-line"></span> AUSTRALIAN TEAM CLOCKS</div>
-        <h1>Different states.<br /><span>Same team.</span></h1>
-        <p class="intro">Live local times across Australia. Compare regions and rearrange clocks to suit your team.</p>
+        <div class="eyebrow"><span class="eyebrow-line"></span> TEAM WORLD CLOCKS</div>
+        <h1>Different places.<br /><span>Same team.</span></h1>
+        <p class="intro">Live local times across Australia and Tokyo. Compare regions and rearrange clocks to suit your team.</p>
       </div>
-      <div class="live-status" aria-label="Clocks updating live">
-        <span class="live-dot" aria-hidden="true"></span>
-        <span>LIVE LOCAL TIME</span>
+      <div class="header-controls">
+        <fieldset class="theme-control" aria-label="Appearance">
+          <legend>APPEARANCE</legend>
+          <div class="theme-options">
+            <label><input type="radio" name="theme" value="system" checked /><span>System</span></label>
+            <label><input type="radio" name="theme" value="light" /><span>Light</span></label>
+            <label><input type="radio" name="theme" value="dark" /><span>Dark</span></label>
+          </div>
+        </fieldset>
+        <div class="live-status" aria-label="Clocks updating live">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span>LIVE LOCAL TIME</span>
+        </div>
       </div>
     </header>
 
@@ -35,9 +56,9 @@
             <option value="Australia/Perth">WA (AWST)</option>
             <option value="Australia/Darwin">NT (ACST)</option>
             <option value="Australia/Adelaide">SA (ACST / ACDT)</option>
-            <option value="Australia/Canberra">ACT (AEST / AEDT)</option>
+            <option value="Asia/Tokyo">Tokyo — Carla (JST)</option>
             <option value="Australia/Brisbane">QLD (AEST)</option>
-            <option value="Australia/Sydney">NSW / VIC (AEST / AEDT)</option>
+            <option value="Australia/Sydney">NSW / VIC / ACT (AEST / AEDT)</option>
           </select>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
         </div>
@@ -50,7 +71,7 @@
     </div>
     <p class="visually-hidden" id="reorder-announcement" role="status" aria-live="polite"></p>
 
-    <section class="clock-grid" aria-label="Current time by state">
+    <section class="clock-grid" aria-label="Current time by location">
       <article class="clock-card clock-card--home" data-zone="Australia/Perth">
         <div class="card-header">
           <div>
@@ -114,11 +135,11 @@
           <div class="difference"><span class="difference-value" data-difference>—</span><span class="difference-label" data-difference-label>vs reference</span></div>
         </div>
       </article>
-      <article class="clock-card clock-card--act" data-zone="Australia/Canberra">
+      <article class="clock-card clock-card--tokyo" data-zone="Asia/Tokyo">
         <div class="card-header">
           <div>
-            <div class="state-code">ACT</div>
-            <div class="state-name">AUSTRALIAN CAPITAL TERRITORY</div>
+            <div class="state-code">JAPAN</div>
+            <div class="state-name">TOKYO</div>
           </div>
           <div class="card-actions"><div class="card-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="M12 7v5.4l3.5 2"/></svg>
@@ -126,12 +147,12 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>
             </button></div>
         </div>
-        <div class="person">Canberra</div>
+        <div class="person">Tokyo <span class="person-separator">/</span> Carla</div>
         <div class="clock-face"><time class="clock-time" data-clock-time>--:--</time><span class="clock-seconds" data-clock-seconds>:--</span></div>
         <div class="local-date" data-local-date>Loading local time…</div>
         <div class="card-divider"></div>
         <div class="card-footer">
-          <div class="timezone"><span class="zone-abbr" data-zone-abbr>AEST / AEDT</span><span class="zone-offset" data-utc-offset>UTC offset</span></div>
+          <div class="timezone"><span class="zone-abbr" data-zone-abbr>JST</span><span class="zone-offset" data-utc-offset>UTC+09:00</span></div>
           <div class="difference"><span class="difference-value" data-difference>—</span><span class="difference-label" data-difference-label>vs Perth</span></div>
         </div>
       </article>
@@ -159,8 +180,8 @@
       <article class="clock-card clock-card--east" data-zone="Australia/Sydney">
         <div class="card-header">
           <div>
-            <div class="state-code state-code--wide">NSW <span class="state-slash">/</span> VIC</div>
-            <div class="state-name">NEW SOUTH WALES &amp; VICTORIA</div>
+            <div class="state-code state-code--wide">NSW <span class="state-slash">/</span> VIC <span class="state-slash">/</span> ACT</div>
+            <div class="state-name">NEW SOUTH WALES · VICTORIA · ACT</div>
           </div>
           <div class="card-actions"><div class="card-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="M12 7v5.4l3.5 2"/></svg>
@@ -168,7 +189,7 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>
             </button></div>
         </div>
-        <div class="person">Sydney <span class="person-separator">/</span> Melbourne</div>
+        <div class="person">Sydney <span class="person-separator">/</span> Melbourne <span class="person-separator">/</span> Canberra</div>
         <div class="clock-face"><time class="clock-time" data-clock-time>--:--</time><span class="clock-seconds" data-clock-seconds>:--</span></div>
         <div class="local-date" data-local-date>Loading local time…</div>
         <div class="card-divider"></div>
@@ -185,10 +206,11 @@
     </section>
 
     <footer class="page-footer">
-      <div class="footer-note"><span class="footer-bullet" aria-hidden="true"></span> Automatically adjusts for daylight saving in SA, ACT, NSW &amp; VIC. NT and QLD remain on standard time.</div>
+      <div class="footer-note"><span class="footer-bullet" aria-hidden="true"></span> Daylight saving updates automatically for SA, NSW, VIC &amp; ACT. WA, NT, QLD &amp; Tokyo stay on standard time.</div>
       <div class="footer-right">Compared with <strong data-reference-label>WA (AWST)</strong></div>
     </footer>
   </main>
   <script src="/clock.js" type="module"></script>
+  <script src="/theme.js" type="module"></script>
 </body>
 </html>
