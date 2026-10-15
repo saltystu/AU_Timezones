@@ -1,5 +1,6 @@
 import { getOffsetMinutes, getAbbreviation, getUTCLabel, getDifference, getTimeParts, getLocalDate } from './timezones.js';
 import { sortByCurrentUTC, validateSavedOrder, moveZoneBeforeOrAfter } from './ordering.js';
+import { getZonedFields, resolveLocalTime } from './time-travel.js';
 
 const grid = document.querySelector('.clock-grid');
 const cards = Array.from(grid.querySelectorAll('.clock-card[data-zone]'));
@@ -12,11 +13,21 @@ const orderStatus = document.querySelector('#order-status');
 const reorderAnnouncement = document.querySelector('#reorder-announcement');
 const utcClock = document.querySelector('#utc-clock');
 const utcDate = document.querySelector('#utc-date');
+const utcHeading = document.querySelector('#utc-heading');
+const previewDate = document.querySelector('#preview-date');
+const previewTime = document.querySelector('#preview-time');
+const resetPreviewButton = document.querySelector('#reset-preview');
+const previewMessage = document.querySelector('#preview-message');
+const previewMode = document.querySelector('#preview-mode');
+const previewReference = document.querySelector('#preview-reference');
+const clockStatus = document.querySelector('#clock-status');
+const clockStatusLabel = document.querySelector('#clock-status-label');
+let previewInstant = null;
 const zoneLabels = {
   'Australia/Perth': 'WA',
   'Australia/Darwin': 'NT',
   'Australia/Adelaide': 'SA',
-  'Asia/Tokyo': 'JAPAN',
+  'Asia/Tokyo': 'Tokyo — Carla',
   'Australia/Brisbane': 'QLD',
   'Australia/Sydney': 'NSW / VIC / ACT'
 };
@@ -67,13 +78,28 @@ function saveManualOrder(order) {
 }
 
 function render() {
-  // Render every region from one instant; UTC offsets update correctly as DST changes.
-  const now = new Date();
+  // Use one instant for every region, whether live or manually selected.
+  const now = previewInstant ?? new Date();
   if (!customOrder && !isDragging) applyOrder(sortByCurrentUTC(allZones, now));
   const selectedZone = zonePicker.value;
   const selectedOffset = getOffsetMinutes(selectedZone, now);
   const selectedAbbr = getAbbreviation(selectedZone, selectedOffset);
   referenceLabel.textContent = `${zoneLabels[selectedZone]} (${selectedAbbr})`;
+  previewReference.textContent = `${zoneLabels[selectedZone]} (${selectedAbbr})`;
+  const previewing = previewInstant !== null;
+  previewMode.textContent = previewing ? 'PREVIEW' : 'LIVE';
+  previewMode.classList.toggle('is-preview', previewing);
+  resetPreviewButton.disabled = !previewing;
+  utcHeading.textContent = previewing ? 'UTC TIME AT SELECTED MOMENT' : 'CURRENT UTC TIME';
+  clockStatus.classList.toggle('is-preview', previewing);
+  clockStatus.setAttribute('aria-label', previewing ? 'Viewing a selected time instead of live time' : 'Clocks updating live');
+  clockStatusLabel.textContent = previewing ? 'PREVIEW MODE · CLOCKS PAUSED' : 'LIVE LOCAL TIME';
+  // Keep controls current without overwriting dates/times actively being edited.
+  if (document.activeElement !== previewDate && document.activeElement !== previewTime) {
+    const fields = getZonedFields(selectedZone, now);
+    if (previewDate.value !== fields.date) previewDate.value = fields.date;
+    if (previewTime.value !== fields.time) previewTime.value = fields.time;
+  }
 
   for (const card of cards) {
     const timeZone = card.dataset.zone;
@@ -106,14 +132,48 @@ function render() {
 }
 
 zonePicker.addEventListener('change', () => {
+  // Preserve the selected absolute moment when changing comparison region;
+  // convert the form inputs so they now express that instant in the new zone.
+  const fields = getZonedFields(zonePicker.value, previewInstant ?? new Date());
+  previewDate.value = fields.date;
+  previewTime.value = fields.time;
+  previewMessage.textContent = '';
   try { localStorage.setItem('au-clock-reference', zonePicker.value); } catch { /* Optional. */ }
+  render();
+});
+
+function updateFromInputs() {
+  if (!previewDate.value || !previewTime.value) return;
+  try {
+    const { instant, ambiguous } = resolveLocalTime(zonePicker.value, previewDate.value, previewTime.value);
+    previewInstant = instant;
+    previewMessage.classList.remove('is-error');
+    previewMessage.textContent = ambiguous
+      ? 'This local time occurs twice when daylight saving ends; showing its first occurrence.' : '';
+    // Release focus from the input before rendering so both fields are normalised.
+    render();
+  } catch (error) {
+    previewMessage.classList.add('is-error');
+    previewMessage.textContent = error.message;
+  }
+}
+previewDate.addEventListener('change', updateFromInputs);
+previewTime.addEventListener('change', updateFromInputs);
+resetPreviewButton.addEventListener('click', () => {
+  previewInstant = null;
+  previewMessage.textContent = '';
+  previewMessage.classList.remove('is-error');
+  const fields = getZonedFields(zonePicker.value, new Date());
+  previewDate.value = fields.date;
+  previewTime.value = fields.time;
+  resetPreviewButton.focus();
   render();
 });
 
 resetOrderButton.addEventListener('click', () => {
   customOrder = null;
   try { localStorage.removeItem('au-clock-card-order'); } catch { /* Optional. */ }
-  applyOrder(sortByCurrentUTC(allZones));
+  applyOrder(sortByCurrentUTC(allZones, previewInstant ?? new Date()));
   reorderAnnouncement.textContent = 'Cards restored to UTC offset order.';
 });
 

@@ -1,9 +1,9 @@
 {
   "name": "au-team-timezones",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "private": true,
   "type": "module",
-  "description": "Six Australia and Tokyo live clocks, UTC sorting, drag-and-drop ordering, and DST-aware reference",
+  "description": "Six team clocks with DST-aware meeting time preview, live UTC, UTC sorting, manual reorder, and appearance options",
   "scripts": {
     "dev": "node scripts/dev-server.js",
     "test": "node --test"
