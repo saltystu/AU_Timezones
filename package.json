@@ -1,0 +1,11 @@
+{
+  "name": "au-team-timezones",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Six Australian region live clocks, UTC sorting, drag-and-drop ordering, and DST-aware reference",
+  "scripts": {
+    "dev": "node scripts/dev-server.js",
+    "test": "node --test"
+  }
+}

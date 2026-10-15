@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a101d" />
+  <meta name="description" content="Live clocks across six Australian regions, with daylight saving and selectable time-zone comparisons." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+  <title>Australian Team Time Zones</title>
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <main class="dashboard">
+    <header class="page-header">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span> AUSTRALIAN TEAM CLOCKS</div>
+        <h1>Different states.<br /><span>Same team.</span></h1>
+        <p class="intro">Live local times across Australia. Compare regions and rearrange clocks to suit your team.</p>
+      </div>
+      <div class="live-status" aria-label="Clocks updating live">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span>LIVE LOCAL TIME</span>
+      </div>
+    </header>
+
+    <section class="comparison-bar" aria-label="Time comparison settings">
+      <div class="comparison-title"><span class="comparison-indicator" aria-hidden="true"></span><span>TIME DIFFERENCES</span><span class="comparison-hint">All clocks update automatically</span></div>
+      <div class="reference-picker">
+        <label for="reference-zone">BASED ON</label>
+        <div class="select-shell">
+          <select id="reference-zone" aria-label="Time zone used for comparison">
+            <option value="Australia/Perth">WA (AWST)</option>
+            <option value="Australia/Darwin">NT (ACST)</option>
+            <option value="Australia/Adelaide">SA (ACST / ACDT)</option>
+            <option value="Australia/Canberra">ACT (AEST / AEDT)</option>
+            <option value="Australia/Brisbane">QLD (AEST)</option>
+            <option value="Australia/Sydney">NSW / VIC (AEST / AEDT)</option>
+          </select>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </div>
+      </div>
+    </section>
+
+    <div class="sorting-toolbar" aria-label="Clock ordering controls">
+      <div class="sorting-copy"><span class="sorting-label" id="order-status">UTC OFFSET ORDER</span><span class="sorting-hint">Drag the grip on any card to rearrange</span></div>
+      <button type="button" class="reset-button" id="reset-order" disabled><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11a9 9 0 1 1 3 7"/><path d="M3 4v7h7"/></svg>Sort by UTC</button>
+    </div>
+    <p class="visually-hidden" id="reorder-announcement" role="status" aria-live="polite"></p>
+
+    <section class="clock-grid" aria-label="Current time by state">
+      <article class="clock-card clock-card--home" data-zone="Australia/Perth">
+        <div class="card-header">
+          <div>
+            <div class="state-code">WA</div>
+            <div class="state-name">WESTERN AUSTRALIA</div>
+          </div>
+          <div class="card-actions"><div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="M12 7v5.4l3.5 2"/></svg>
+          </div><button type="button" class="drag-handle" aria-label="Reorder this clock. Drag to move, or use arrow keys" title="Drag to reorder (keyboard: arrow keys)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>
+            </button></div>
+        </div>
+        <div class="person">Perth</div>
+        <div class="clock-face"><time class="clock-time" data-clock-time>--:--</time><span class="clock-seconds" data-clock-seconds>:--</span></div>
+        <div class="local-date" data-local-date>Loading local time…</div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="timezone"><span class="zone-abbr" data-zone-abbr>AWST</span><span class="zone-offset" data-utc-offset>UTC+08:00</span></div>
+          <div class="difference"><span class="difference-value" data-difference>BASE</span><span class="difference-label" data-difference-label>Reference</span></div>
+        </div>
+      </article>
+      <article class="clock-card clock-card--sa" data-zone="Australia/Adelaide">
+        <div class="card-header">
+          <div>
+            <div class="state-code">SA</div>
+            <div class="state-name">SOUTH AUSTRALIA</div>
+          </div>
+          <div class="card-actions"><div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="M12 7v5.4l3.5 2"/></svg>
+          </div><button type="button" class="drag-handle" aria-label="Reorder this clock. Drag to move, or use arrow keys" title="Drag to reorder (keyboard: arrow keys)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>
+            </button></div>
+        </div>
+        <div class="person">Adelaide <span class="person-separator">/</span> Steve</div>
+        <div class="clock-face"><time class="clock-time" data-clock-time>--:--</time><span class="clock-seconds" data-clock-seconds>:--</span></div>
+        <div class="local-date" data-local-date>Loading local time…</div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="timezone"><span class="zone-abbr" data-zone-abbr>ACST / ACDT</span><span class="zone-offset" data-utc-offset>UTC offset</span></div>
+          <div class="difference"><span class="difference-value" data-difference>—</span><span class="difference-label" data-difference-label>vs Perth</span></div>
+        </div>
+      </article>
+      <article class="clock-card clock-card--nt" data-zone="Australia/Darwin">
+        <div class="card-header">
+          <div>
+            <div class="state-code">NT</div>
+            <div class="state-name">NORTHERN TERRITORY</div>
+          </div>
+          <div class="card-actions"><div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="M12 7v5.4l3.5 2"/></svg>
+          </div><button type="button" class="drag-handle" aria-label="Reorder this clock. Drag to move, or use arrow keys" title="Drag to reorder (keyboard: arrow keys)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>
+            </button></div>
+        </div>
+        <div class="person">Darwin</div>
+        <div class="clock-face"><time class="clock-time" data-clock-time>--:--</time><span class="clock-seconds" data-clock-seconds>:--</span></div>
+        <div class="local-date" data-local-date>Loading local time…</div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="timezone"><span class="zone-abbr" data-zone-abbr>ACST</span><span class="zone-offset" data-utc-offset>UTC+09:30</span></div>
+          <div class="difference"><span class="difference-value" data-difference>—</span><span class="difference-label" data-difference-label>vs reference</span></div>
+        </div>
+      </article>
+      <article class="clock-card clock-card--act" data-zone="Australia/Canberra">
+        <div class="card-header">
+          <div>
+            <div class="state-code">ACT</div>
+            <div class="state-name">AUSTRALIAN CAPITAL TERRITORY</div>
+          </div>
+          <div class="card-actions"><div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="M12 7v5.4l3.5 2"/></svg>
+          </div><button type="button" class="drag-handle" aria-label="Reorder this clock. Drag to move, or use arrow keys" title="Drag to reorder (keyboard: arrow keys)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>
+            </button></div>
+        </div>
+        <div class="person">Canberra</div>
+        <div class="clock-face"><time class="clock-time" data-clock-time>--:--</time><span class="clock-seconds" data-clock-seconds>:--</span></div>
+        <div class="local-date" data-local-date>Loading local time…</div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="timezone"><span class="zone-abbr" data-zone-abbr>AEST / AEDT</span><span class="zone-offset" data-utc-offset>UTC offset</span></div>
+          <div class="difference"><span class="difference-value" data-difference>—</span><span class="difference-label" data-difference-label>vs Perth</span></div>
+        </div>
+      </article>
+      <article class="clock-card clock-card--qld" data-zone="Australia/Brisbane">
+        <div class="card-header">
+          <div>
+            <div class="state-code">QLD</div>
+            <div class="state-name">QUEENSLAND</div>
+          </div>
+          <div class="card-actions"><div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="M12 7v5.4l3.5 2"/></svg>
+          </div><button type="button" class="drag-handle" aria-label="Reorder this clock. Drag to move, or use arrow keys" title="Drag to reorder (keyboard: arrow keys)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>
+            </button></div>
+        </div>
+        <div class="person">Brisbane <span class="person-separator">/</span> Daniel</div>
+        <div class="clock-face"><time class="clock-time" data-clock-time>--:--</time><span class="clock-seconds" data-clock-seconds>:--</span></div>
+        <div class="local-date" data-local-date>Loading local time…</div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="timezone"><span class="zone-abbr" data-zone-abbr>AEST</span><span class="zone-offset" data-utc-offset>UTC+10:00</span></div>
+          <div class="difference"><span class="difference-value" data-difference>—</span><span class="difference-label" data-difference-label>vs Perth</span></div>
+        </div>
+      </article>
+      <article class="clock-card clock-card--east" data-zone="Australia/Sydney">
+        <div class="card-header">
+          <div>
+            <div class="state-code state-code--wide">NSW <span class="state-slash">/</span> VIC</div>
+            <div class="state-name">NEW SOUTH WALES &amp; VICTORIA</div>
+          </div>
+          <div class="card-actions"><div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="M12 7v5.4l3.5 2"/></svg>
+          </div><button type="button" class="drag-handle" aria-label="Reorder this clock. Drag to move, or use arrow keys" title="Drag to reorder (keyboard: arrow keys)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="5" r="1.7"/><circle cx="16" cy="5" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="16" cy="12" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16" cy="19" r="1.7"/></svg>
+            </button></div>
+        </div>
+        <div class="person">Sydney <span class="person-separator">/</span> Melbourne</div>
+        <div class="clock-face"><time class="clock-time" data-clock-time>--:--</time><span class="clock-seconds" data-clock-seconds>:--</span></div>
+        <div class="local-date" data-local-date>Loading local time…</div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="timezone"><span class="zone-abbr" data-zone-abbr>AEST / AEDT</span><span class="zone-offset" data-utc-offset>UTC offset</span></div>
+          <div class="difference"><span class="difference-value" data-difference>—</span><span class="difference-label" data-difference-label>vs Perth</span></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="utc-strip" aria-label="Current Coordinated Universal Time">
+      <div class="utc-strip-heading"><span class="utc-dot" aria-hidden="true"></span><span>CURRENT UTC TIME</span><span class="utc-caption">Coordinated Universal Time</span></div>
+      <div class="utc-strip-time"><time id="utc-clock" datetime="">--:--:--</time><span id="utc-date">Loading UTC date…</span></div>
+    </section>
+
+    <footer class="page-footer">
+      <div class="footer-note"><span class="footer-bullet" aria-hidden="true"></span> Automatically adjusts for daylight saving in SA, ACT, NSW &amp; VIC. NT and QLD remain on standard time.</div>
+      <div class="footer-right">Compared with <strong data-reference-label>WA (AWST)</strong></div>
+    </footer>
+  </main>
+  <script src="/clock.js" type="module"></script>
+</body>
+</html>
