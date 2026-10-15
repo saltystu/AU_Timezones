@@ -27,7 +27,7 @@ const zoneLabels = {
   'Australia/Perth': 'WA',
   'Australia/Darwin': 'NT',
   'Australia/Adelaide': 'SA',
-  'Asia/Tokyo': 'Tokyo — Carla',
+  'Asia/Tokyo': 'JAPAN',
   'Australia/Brisbane': 'QLD',
   'Australia/Sydney': 'NSW / VIC / ACT'
 };
